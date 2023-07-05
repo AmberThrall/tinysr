@@ -9,9 +9,11 @@ pub struct Points;
 impl Primitive for Points {
     fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         for vertex in vertices {
-            let trans_v = program.vertex(vertex);
-            let color = program.fragment(trans_v.1);
-            target.draw_ndc(trans_v.0[0], trans_v.0[1], color);
+            let mut trans_v = [0.0;3];
+            let vert_out = program.vertex(vertex, &mut trans_v);
+            let mut color = [0.0;4];
+            let _discard = program.fragment(vert_out, &mut color);
+            target.draw_ndc(trans_v[0], trans_v[1], color);
         }
     }
 }
@@ -20,13 +22,15 @@ pub struct Lines;
 impl Primitive for Lines {
     fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         for i in 0..vertices.len() {
-            let a = program.vertex(&vertices[i]);
-            let b = program.vertex(&vertices[(i + 1) % vertices.len()]);
-            let color_a = program.fragment(a.1);
-            let color_b = program.fragment(b.1);
+            let mut a = [0.0;3];
+            let mut color_a = [0.0;4];
+            program.fragment(program.vertex(&vertices[i], &mut a), &mut color_a);
+            let mut b = [0.0;3];
+            let mut color_b = [0.0;4];
+            program.fragment(program.vertex(&vertices[(i+1)%vertices.len()], &mut b), &mut color_b);
             draw_line(target, 
-                target.conv_ndc_coords(a.0[0], a.0[1]),
-                target.conv_ndc_coords(b.0[0], b.0[1]),
+                target.conv_ndc_coords(a[0], a[1]),
+                target.conv_ndc_coords(b[0], b[1]),
                 color_a,
                 color_b
             );  

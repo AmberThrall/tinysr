@@ -8,9 +8,11 @@ impl Primitive for Triangle {
         for i in 0..ntris {
             let mut pts = Vec::new();
             for j in 0..3 {
-                let data = program.vertex(&vertices[i * 3 + j]);
-                let color = program.fragment(data.1);
-                pts.push((data.0, color));
+                let mut pt = [0.0;3];
+                let mut color = [0.0;4];
+                let data = program.vertex(&vertices[i * 3 + j], &mut pt);
+                let discard = program.fragment(data, &mut color);
+                pts.push((pt, color));
             }
 
             draw_triangle(pts, target);

@@ -9,15 +9,14 @@ impl Program for Shader {
     type Vertex = [f32; 6];
     type VertexOut = [f32;3];
     
-    fn vertex(&self, v: &Self::Vertex) -> ([f32;3], Self::VertexOut) {
-        (
-            [v[0],v[1],v[2]], 
-            [v[3],v[4],v[5]]
-        )
+    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;3]) -> Self::VertexOut {
+        *position = [v[0], v[1], v[2]];
+        [v[3],v[4],v[5]]
     }
 
-    fn fragment(&self, v: Self::VertexOut) -> [f32;4] {
-        [v[0], v[1], v[2], 1.0]
+    fn fragment(&self, v: Self::VertexOut, color: &mut [f32;4]) -> bool {
+        *color = [v[0], v[1], v[2], 1.0];
+        false
     }
 }
 
