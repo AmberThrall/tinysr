@@ -25,7 +25,7 @@ impl Program for Shader {
         v.normal.into_array()
     }
 
-    fn fragment(&self, n: Self::VertexOut, color: &mut [f32;4]) -> bool {
+    fn fragment(&self, n: Self::VertexOut, color: &mut [f32;4]) -> Fragment {
         let n = Vec3::from(n);
         let ambient = 0.2;
         let diffuse =  n.dot(self.light_dir).max(0.0).min(1.0) * 0.5;
@@ -36,7 +36,7 @@ impl Program for Shader {
         let light = ambient + diffuse + specular;
 
         *color = (self.color * light).clamped(Rgba::zero(), Rgba::one()).into_array();
-        false
+        Fragment::Keep
     }
 }
 

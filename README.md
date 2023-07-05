@@ -17,9 +17,9 @@ impl Program for Shader {
         [v[3],v[4],v[5]]
     }
 
-    fn fragment(&self, v: Self::VertexOut, color: &mut [f32;4]) -> bool {
+    fn fragment(&self, v: Self::VertexOut, color: &mut [f32;4]) -> Fragment {
         *color = [v[0], v[1], v[2], 1.0];
-        false
+        Fragment::Keep
     }
 }
 

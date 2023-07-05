@@ -14,6 +14,12 @@ pub use primitive::{Primitive, Points, Lines};
 pub use triangles::Triangles;
 use rect::Rect;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Fragment {
+    Keep,
+    Discard,
+}
+
 #[derive(Default)]
 pub struct TinySR {
     screen: ScreenBuffer,

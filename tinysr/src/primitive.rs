@@ -1,4 +1,4 @@
-use super::{ScreenBuffer, Program};
+use super::{ScreenBuffer, Program, Fragment};
 use crate::interpolate::Interpolate;
 
 pub trait Primitive {
@@ -12,8 +12,8 @@ impl Primitive for Points {
             let mut trans_v = [0.0;4];
             let vert_out = program.vertex(vertex, &mut trans_v);
             let mut color = [0.0;4];
-            let _discard = program.fragment(vert_out, &mut color);
-            if target.write_zbuffer_ndc(trans_v[0]/trans_v[3], trans_v[1]/trans_v[3], trans_v[2]/trans_v[3]) {
+            let discard = program.fragment(vert_out, &mut color);
+            if discard == Fragment::Keep && target.write_zbuffer_ndc(trans_v[0]/trans_v[3], trans_v[1]/trans_v[3], trans_v[2]/trans_v[3]) {
                 target.draw_ndc(trans_v[0], trans_v[1], color);
             }
         }
@@ -55,7 +55,7 @@ impl Primitive for Lines {
                         &[data_a.clone(), data_b.clone()],
                         &[(1.0-t), t],
                     );
-                    if !program.fragment(data_interp, &mut color) {
+                    if program.fragment(data_interp, &mut color) == Fragment::Keep {
                         target.draw(x, y, color);
                     }    
                 }

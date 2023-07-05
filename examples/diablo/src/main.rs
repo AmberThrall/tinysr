@@ -50,7 +50,7 @@ impl Program for Shader {
         [v.uv.x, v.uv.y, frag_pos.x, frag_pos.y, frag_pos.z]
     }
 
-    fn fragment(&self, vin: Self::VertexOut, color: &mut [f32;4]) -> bool {
+    fn fragment(&self, vin: Self::VertexOut, color: &mut [f32;4]) -> Fragment {
         let uv = Vec2::new(vin[0], vin[1]);
         let frag_pos = Vec3::new(vin[2], vin[3], vin[4]);
 
@@ -66,7 +66,7 @@ impl Program for Shader {
         let light = ambient + diffuse + 0.6 * specular;
 
         *color = Rgba::from(c * light).clamped(Rgba::zero(), Rgba::one()).into_array();
-        false
+        Fragment::Keep
     }
 }
 

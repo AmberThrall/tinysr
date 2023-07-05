@@ -1,5 +1,5 @@
 use crate::utils::cross_product;
-use super::{Primitive, Program, ScreenBuffer};
+use super::{Primitive, Program, ScreenBuffer, Fragment};
 use crate::interpolate::Interpolate;
 
 pub struct Triangles;
@@ -49,7 +49,7 @@ impl Primitive for Triangles {
                             );
     
                             let mut color = [0.0;4];
-                            if !program.fragment(data_interp, &mut color) {
+                            if program.fragment(data_interp, &mut color) == Fragment::Keep {
                                 target.draw(x, y, color);
                             }
                         }
