@@ -44,7 +44,7 @@ fn main() {
         0, 1, 3,
         1, 2, 3
     ];
-    tinysr.draw_elements::<Triangle,_>(&shader, &vertices, &indices);
+    tinysr.draw_elements::<Lines,_>(&shader, &vertices, &indices);
 
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);

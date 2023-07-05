@@ -5,6 +5,7 @@ mod screen;
 mod primitive;
 mod utils;
 mod triangle;
+mod interpolate;
 
 pub use buffer::{Buffer, Buffer2d};
 pub use screen::ScreenBuffer;
