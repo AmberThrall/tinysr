@@ -22,6 +22,16 @@ impl ScreenBuffer {
         s
     }
 
+    /// Clears the screen buffer and zbuffer
+    /// 
+    /// # Arguments
+    /// 
+    /// * `color` - clear color
+    pub fn clear(&mut self, color: [f32;4]) {
+        self.buffer = Buffer2d::new([self.viewport.size[0] as usize, self.viewport.size[1] as usize], color);
+        self.zbuffer = Buffer2d::new([self.viewport.size[0] as usize, self.viewport.size[1] as usize], -f32::MAX);
+    }
+
     /// Resizes the screen buffer
     /// 
     /// # Arguments
@@ -32,8 +42,7 @@ impl ScreenBuffer {
     /// * `height` - height of viewport
     pub fn resize(&mut self, x: i32, y: i32, width: usize, height: usize) {
         self.viewport = Rect::new(x, y, width as i32, height as i32);
-        self.buffer = Buffer2d::new([width, height], [0.0, 0.0, 0.0, 1.0]);
-        self.zbuffer = Buffer2d::new([width, height], -f32::MAX);
+        self.clear([0.0,0.0,0.0,1.0]);
     }
 
     /// Writes a color to the screen buffer.

@@ -1,5 +1,5 @@
 [package]
-name = "head"
+name = "diablo"
 version = "0.1.0"
 edition = "2021"
 
@@ -10,3 +10,4 @@ tinysr = { path = "../../tinysr" }
 image = "0.24.6"
 tobj = "4.0.0"
 vek = "0.15.10"
+indicatif = "0.17.5"

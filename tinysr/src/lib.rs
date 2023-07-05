@@ -36,6 +36,15 @@ impl TinySR {
         &self.screen
     }
 
+    // Clears the screen buffer and zbuffer
+    /// 
+    /// # Arguments
+    /// 
+    /// * `color` - clear color
+    pub fn clear_screen(&mut self, color: [f32;4]) {
+        self.screen.clear(color);
+    }
+
     /// Draws a vertex array
     /// 
     /// # Arguments
