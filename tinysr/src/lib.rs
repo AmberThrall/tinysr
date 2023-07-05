@@ -32,10 +32,15 @@ impl TinySR {
         &self.screen
     }
 
-    pub fn draw_array<P: Primitive,V,Vo>(&mut self, program: &dyn Program<Vertex=V,VertexOut=Vo>, vao: &Vec<V>, first: usize, count: usize) {
-        for i in first..count {
-            P::draw(program, vao.get(i).unwrap(), &mut screen);
-        }
+    /// Draws a vertex array
+    /// 
+    /// # Arguments
+    /// 
+    /// * `P` - what primitive format to use
+    /// * `program` - shader program to use
+    /// * `vao` - vertex array to draw
+    pub fn draw_array<P: Primitive,Pr: Program>(&mut self, program: &Pr, vao: &[Pr::Vertex]) {
+        P::draw(program, vao, &mut self.screen);
     }
 
     // pub fn draw_line(&mut self, a: [i32;2], b: [i32;2], color: Color) {

@@ -36,7 +36,7 @@ fn main() {
         [ 0.5, -0.5, 0.0],
         [ 0.0,  0.5, 0.0],
     ];
-    tinysr.draw_array(&shader, &vertices, 0, 3);
+    tinysr.draw_array::<Points,_>(&shader, &vertices);
 
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
