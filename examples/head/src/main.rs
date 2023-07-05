@@ -100,7 +100,7 @@ fn main() {
 
         // Setup the indices and render
         let indices: Vec<usize> = mesh.indices.iter().map(|idx| *idx as usize).collect();
-        tinysr.draw_elements::<Triangle,_>(&shader, &vertices, &indices);
+        tinysr.draw_elements::<Triangles,_>(&shader, &vertices, &indices);
     }
 
     // Save the screen buffer to image

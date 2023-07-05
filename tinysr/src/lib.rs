@@ -4,14 +4,14 @@ mod program;
 mod screen;
 mod primitive;
 mod utils;
-mod triangle;
+mod triangles;
 mod interpolate;
 
 pub use buffer::{Buffer, Buffer2d};
 pub use screen::ScreenBuffer;
 pub use program::Program;
 pub use primitive::{Primitive, Points, Lines};
-pub use triangle::Triangle;
+pub use triangles::Triangles;
 use rect::Rect;
 
 #[derive(Default)]

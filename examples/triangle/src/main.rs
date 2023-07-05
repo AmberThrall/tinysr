@@ -39,7 +39,7 @@ fn main() {
         [ 0.5, -0.5, 0.0,   0.0, 1.0, 0.0],
         [ 0.0,  0.5, 0.0,   0.0, 0.0, 1.0],
     ];
-    tinysr.draw_array::<Triangle,_>(&shader, &vertices);
+    tinysr.draw_array::<Triangles,_>(&shader, &vertices);
 
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);

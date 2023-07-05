@@ -2,8 +2,8 @@ use crate::utils::cross_product;
 use super::{Primitive, Program, ScreenBuffer};
 use crate::interpolate::Interpolate;
 
-pub struct Triangle;
-impl Primitive for Triangle {
+pub struct Triangles;
+impl Primitive for Triangles {
     fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         let ntris = vertices.len() / 3;
         for i in 0..ntris {
