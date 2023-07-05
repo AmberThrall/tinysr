@@ -43,7 +43,22 @@ impl TinySR {
     /// * `program` - shader program to use
     /// * `vao` - vertex array to draw
     pub fn draw_array<P: Primitive,Pr: Program>(&mut self, program: &Pr, vao: &[Pr::Vertex]) {
-        P::draw(program, vao, &mut self.screen);
+        let mut new_vao = Vec::new();
+        for idx in 0..vao.len() { new_vao.push(&vao[idx]); }
+        P::draw(program, &new_vao, &mut self.screen);
+    }
+
+    /// Draws a vertex array
+    /// 
+    /// # Arguments
+    /// 
+    /// * `P` - what primitive format to use
+    /// * `program` - shader program to use
+    /// * `vao` - vertex array to draw
+    pub fn draw_elements<P: Primitive,Pr: Program>(&mut self, program: &Pr, vao: &[Pr::Vertex], indices: &[usize]) {
+        let mut new_vao = Vec::new();
+        for idx in indices { new_vao.push(&vao[*idx]); }
+        P::draw(program, &new_vao, &mut self.screen);
     }
 
     // pub fn draw_line(&mut self, a: [i32;2], b: [i32;2], color: Color) {

@@ -3,7 +3,7 @@ use super::{Primitive, Program, ScreenBuffer};
 
 pub struct Triangle;
 impl Primitive for Triangle {
-    fn draw<P: Program>(program: &P, vertices: &[P::Vertex], target: &mut ScreenBuffer) {
+    fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         let ntris = vertices.len() / 3;
         for i in 0..ntris {
             let mut pts = Vec::new();

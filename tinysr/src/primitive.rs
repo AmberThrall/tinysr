@@ -2,12 +2,12 @@ use super::{ScreenBuffer, Program};
 use crate::utils::mix;
 
 pub trait Primitive {
-    fn draw<P: Program>(program: &P, vertices: &[P::Vertex], target: &mut ScreenBuffer);
+    fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer);
 }
 
 pub struct Points;
 impl Primitive for Points {
-    fn draw<P: Program>(program: &P, vertices: &[P::Vertex], target: &mut ScreenBuffer) {
+    fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         for vertex in vertices {
             let trans_v = program.vertex(vertex);
             let color = program.fragment(trans_v.1);
@@ -18,7 +18,7 @@ impl Primitive for Points {
 
 pub struct Lines;
 impl Primitive for Lines {
-    fn draw<P: Program>(program: &P, vertices: &[P::Vertex], target: &mut ScreenBuffer) {
+    fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         for i in 0..vertices.len() {
             let a = program.vertex(&vertices[i]);
             let b = program.vertex(&vertices[(i + 1) % vertices.len()]);
