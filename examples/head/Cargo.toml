@@ -1,0 +1,12 @@
+[package]
+name = "head"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tinysr = { path = "../../tinysr" }
+image = "0.24.6"
+tobj = "4.0.0"
+vek = "0.15.10"
