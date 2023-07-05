@@ -4,11 +4,13 @@ mod program;
 mod screen;
 mod primitive;
 mod utils;
+mod triangle;
 
 pub use buffer::{Buffer, Buffer2d};
 pub use screen::ScreenBuffer;
 pub use program::Program;
-pub use primitive::*;
+pub use primitive::{Primitive, Points, Lines};
+pub use triangle::Triangle;
 use rect::Rect;
 
 #[derive(Default)]

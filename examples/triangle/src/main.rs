@@ -1,7 +1,7 @@
 use tinysr::*;
 
-const WIDTH: usize = 100;
-const HEIGHT: usize = 100;
+const WIDTH: usize = 800;
+const HEIGHT: usize = 600;
 
 struct Shader;
 
@@ -9,9 +9,9 @@ impl Program for Shader {
     type Vertex = [f32; 6];
     type VertexOut = [f32;3];
     
-    fn vertex(&self, v: &Self::Vertex) -> ([f32;4], Self::VertexOut) {
+    fn vertex(&self, v: &Self::Vertex) -> ([f32;3], Self::VertexOut) {
         (
-            [v[0],v[1],v[2], 0.0], 
+            [v[0],v[1],v[2]], 
             [v[3],v[4],v[5]]
         )
     }
@@ -40,7 +40,7 @@ fn main() {
         [ 0.5, -0.5, 0.0,   0.0, 1.0, 0.0],
         [ 0.0,  0.5, 0.0,   0.0, 0.0, 1.0],
     ];
-    tinysr.draw_array::<Lines,_>(&shader, &vertices);
+    tinysr.draw_array::<Triangle,_>(&shader, &vertices);
 
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
