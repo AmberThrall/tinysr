@@ -22,9 +22,9 @@ impl Program for Shader {
     type Vertex = Vertex;
     type VertexOut = [f32;5];
     
-    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;3]) -> Self::VertexOut {
+    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;4]) -> Self::VertexOut {
         let p = (self.mvp * Vec4::from_point(v.position)).into_array();
-        *position = [p[0], p[1], p[2]];
+        *position = [p[0], p[1], p[2], p[3]];
         [v.uv.x, v.uv.y, v.normal.x, v.normal.y, v.normal.z]
     }
 
@@ -70,11 +70,16 @@ fn main() {
 
     let texture = image::open("examples/head/head_diffuse.tga").unwrap();
 
+    let eye = Vec3::new(-1.0, -1.0, 3.0);
+    let target = Vec3::zero();
+    let up = Vec3::new(0.0, 1.0, 0.0);
+
+    let m_projection: Mat4<f32> = Mat4::perspective_fov_rh_no(0.785398, WIDTH as f32, HEIGHT as f32, 0.1, 100.0);
+    let m_view: Mat4<f32> = Mat4::look_at_rh(eye, target, up);
+    let m_model: Mat4<f32> = Mat4::rotation_y(3.14159);
+
     let shader = Shader {
-        mvp: Mat4::perspective_fov_rh_zo(1.3, WIDTH as f32, HEIGHT as f32, 0.01, 100.0) *
-            Mat4::translation_3d(Vec3::new(0.0, 0.0, -2.5)) *
-            Mat4::rotation_y(3.14) *
-            Mat4::scaling_3d(0.6),
+        mvp: m_projection * m_view * m_model,
         light_dir: Vec3::new(1.0,1.0,1.0).normalized(),
         texture,
     };
@@ -106,7 +111,7 @@ fn main() {
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
     for (x, y, pixel) in img.enumerate_pixels_mut() {
-        *pixel = convert_color(*tinysr.get_screen_buffer().get(x as i32,y as i32).unwrap());
+        *pixel = convert_color(*tinysr.get_screen_buffer().get(x as i32,HEIGHT as i32 - 1 - y as i32).unwrap());
     }
     img.save("output.png").unwrap();
 }

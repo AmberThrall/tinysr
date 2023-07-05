@@ -9,8 +9,8 @@ impl Program for Shader {
     type Vertex = [f32; 6];
     type VertexOut = [f32;3];
     
-    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;3]) -> Self::VertexOut {
-        *position = [v[0], v[1], v[2]];
+    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;4]) -> Self::VertexOut {
+        *position = [v[0], v[1], v[2], 1.0];
         [v[3],v[4],v[5]]
     }
 
@@ -49,7 +49,7 @@ fn main() {
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
     for (x, y, pixel) in img.enumerate_pixels_mut() {
-        *pixel = convert_color(*tinysr.get_screen_buffer().get(x as i32,y as i32).unwrap());
+        *pixel = convert_color(*tinysr.get_screen_buffer().get(x as i32,HEIGHT as i32 - 1 - y as i32).unwrap());
     }
     img.save("output.png").unwrap();
 }

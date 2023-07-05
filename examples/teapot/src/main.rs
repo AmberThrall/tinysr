@@ -20,9 +20,8 @@ impl Program for Shader {
     type Vertex = Vertex;
     type VertexOut = [f32;3];
     
-    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;3]) -> Self::VertexOut {
-        let p = (self.mvp * Vec4::from_point(v.position)).into_array();
-        *position = [p[0], p[1], p[2]];
+    fn vertex(&self, v: &Self::Vertex, position: &mut [f32;4]) -> Self::VertexOut {
+        *position = (self.mvp * Vec4::from_point(v.position)).into_array();
         v.normal.into_array()
     }
 
@@ -68,14 +67,11 @@ fn main() {
 
         // build the vao
         let mut vertices = vec![Vertex::default(); mesh.positions.len()/3];
-        for idx in 0..mesh.positions.len()/3 {
-            vertices[idx].position = Vec3::new(mesh.positions[idx*3], mesh.positions[idx*3+1], mesh.positions[idx*3+2]);
-        }
-
         for idx in 0..mesh.indices.len()/3 {
             for j in 0..3 {
                 let pidx = mesh.indices[idx * 3 + j] as usize;
                 let nidx = mesh.normal_indices[idx * 3 + j] as usize;
+                vertices[pidx].position = Vec3::new(mesh.positions[pidx*3], mesh.positions[pidx*3+1], mesh.positions[pidx*3+2]);
                 vertices[pidx].normal = Vec3::new(mesh.normals[nidx*3], mesh.normals[nidx*3+1], mesh.normals[nidx*3+2]);
             }
         }
@@ -88,7 +84,7 @@ fn main() {
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);
     for (x, y, pixel) in img.enumerate_pixels_mut() {
-        *pixel = convert_color(*tinysr.get_screen_buffer().get(x as i32,y as i32).unwrap());
+        *pixel = convert_color(*tinysr.get_screen_buffer().get(x as i32,HEIGHT as i32 - 1 - y as i32).unwrap());
     }
     img.save("output.png").unwrap();
 }

@@ -44,8 +44,7 @@ impl ScreenBuffer {
     /// * `y` - y coordinate
     /// * `color` - color to write
     pub fn draw(&mut self, x: i32, y: i32, color: [f32;4]) {
-        let p = [x - self.viewport.origin[0], self.viewport.size[1] - y + self.viewport.origin[1]];
-        if let Some(elem) = self.buffer.get_mut(p[0] as usize, p[1] as usize) {
+        if let Some(elem) = self.buffer.get_mut(x as usize, y as usize) {
             *elem = color.clone();
         }
     }
@@ -71,8 +70,7 @@ impl ScreenBuffer {
     /// * `y` - y coordinate
     /// * `z` - value
     pub fn write_zbuffer(&mut self, x: i32, y: i32, z: f32) -> bool {
-        let p = [x - self.viewport.origin[0], self.viewport.size[1] - y + self.viewport.origin[1]];
-        if let Some(elem) = self.zbuffer.get_mut(p[0] as usize, p[1] as usize) {
+        if let Some(elem) = self.zbuffer.get_mut(x as usize, y as usize) {
             if *elem < z {
                 *elem = z;
                 true
@@ -119,15 +117,28 @@ impl ScreenBuffer {
     /// # Arguments
     /// 
     /// * `x` - x coordinate
-    /// * `y` - y coordinates
+    /// * `y` - y coordinate
     pub fn get_ndc(&self, x: f32, y: f32) -> Option<&[f32;4]> {
         let p = self.conv_ndc_coords(x, y);
         self.get(p[0], p[1])
     }
 
+    /// Converts NDC coordinates into screen coordinates
+    /// 
+    /// # Arguments
+    /// 
+    /// * `x` - x coordinate
+    /// * `y` - y coordinate
     pub fn conv_ndc_coords(&self, x: f32, y: f32) -> [i32;2] {
-        let x = (self.viewport.size[0] as f32 / 2.0) * (x + 1.0);
-        let y = (self.viewport.size[1] as f32 / 2.0) * (y + 1.0);
+        // (
+        //     w/2.0,   0.0,   0.0, x + w/2.0,
+        //       0.0, h/2.0,   0.0, y + h/2.0,
+        //       0.0,   0.0,   0.5,       0.5,
+        //       0.0,   0.0,   0.0,       1.0,
+        // )
+
+        let x = (self.viewport.size[0] as f32 / 2.0) * (x + 1.0) + self.viewport.origin[0] as f32;
+        let y = (self.viewport.size[1] as f32 / 2.0) * (y + 1.0) + self.viewport.origin[1] as f32;
         [x as i32, y as i32]
     }
 }

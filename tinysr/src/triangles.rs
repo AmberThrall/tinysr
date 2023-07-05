@@ -9,9 +9,9 @@ impl Primitive for Triangles {
         for i in 0..ntris {
             let mut pts = Vec::new();
             for j in 0..3 {
-                let mut pt = [0.0;3];
+                let mut pt = [0.0;4];
                 let data = program.vertex(&vertices[i * 3 + j], &mut pt);
-                pts.push((pt, data));
+                pts.push(([pt[0]/pt[3], pt[1]/pt[3], pt[2]/pt[3]], data));
             }
 
             // Actually draw the triangle

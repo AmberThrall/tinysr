@@ -9,11 +9,11 @@ pub struct Points;
 impl Primitive for Points {
     fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         for vertex in vertices {
-            let mut trans_v = [0.0;3];
+            let mut trans_v = [0.0;4];
             let vert_out = program.vertex(vertex, &mut trans_v);
             let mut color = [0.0;4];
             let _discard = program.fragment(vert_out, &mut color);
-            if target.write_zbuffer_ndc(trans_v[0], trans_v[1], trans_v[2]) {
+            if target.write_zbuffer_ndc(trans_v[0]/trans_v[3], trans_v[1]/trans_v[3], trans_v[2]/trans_v[3]) {
                 target.draw_ndc(trans_v[0], trans_v[1], color);
             }
         }
@@ -24,10 +24,12 @@ pub struct Lines;
 impl Primitive for Lines {
     fn draw<P: Program>(program: &P, vertices: &[&P::Vertex], target: &mut ScreenBuffer) {
         for i in 0..vertices.len() {
-            let mut a_orig = [0.0;3];
+            let mut a_orig = [0.0;4];
             let data_a = program.vertex(&vertices[i], &mut a_orig);
-            let mut b_orig = [0.0;3];
+            let a_orig = [a_orig[0]/a_orig[3], a_orig[1]/a_orig[3], a_orig[2]/a_orig[3]];
+            let mut b_orig = [0.0;4];
             let data_b = program.vertex(&vertices[(i+1)%vertices.len()], &mut b_orig);
+            let b_orig = [b_orig[0]/b_orig[3], b_orig[1]/b_orig[3], b_orig[2]/b_orig[3]];
 
             // Actually draw the line
             let a = target.conv_ndc_coords(a_orig[0], a_orig[1]);
