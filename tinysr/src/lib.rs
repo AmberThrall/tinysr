@@ -3,6 +3,7 @@ mod rect;
 mod program;
 mod screen;
 mod primitive;
+mod utils;
 
 pub use buffer::{Buffer, Buffer2d};
 pub use screen::ScreenBuffer;

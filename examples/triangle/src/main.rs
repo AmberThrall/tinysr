@@ -6,15 +6,18 @@ const HEIGHT: usize = 100;
 struct Shader;
 
 impl Program for Shader {
-    type Vertex = [f32; 3];
-    type VertexOut = ();
+    type Vertex = [f32; 6];
+    type VertexOut = [f32;3];
     
-    fn vertex(&self, pos: &Self::Vertex) -> ([f32;4], Self::VertexOut) {
-        ([pos[0], pos[1], pos[2], 0.0], ())
+    fn vertex(&self, v: &Self::Vertex) -> ([f32;4], Self::VertexOut) {
+        (
+            [v[0],v[1],v[2], 0.0], 
+            [v[3],v[4],v[5]]
+        )
     }
 
-    fn fragment(&self, _vin: Self::VertexOut) -> [f32;4] {
-        [1.0, 0.0, 0.0, 1.0]
+    fn fragment(&self, v: Self::VertexOut) -> [f32;4] {
+        [v[0], v[1], v[2], 1.0]
     }
 }
 
@@ -32,11 +35,12 @@ fn main() {
     let shader = Shader;
 
     let vertices = vec![
-        [-0.5, -0.5, 0.0],
-        [ 0.5, -0.5, 0.0],
-        [ 0.0,  0.5, 0.0],
+        //  X     Y    Z      R    G    B
+        [-0.5, -0.5, 0.0,   1.0, 0.0, 0.0],
+        [ 0.5, -0.5, 0.0,   0.0, 1.0, 0.0],
+        [ 0.0,  0.5, 0.0,   0.0, 0.0, 1.0],
     ];
-    tinysr.draw_array::<Points,_>(&shader, &vertices);
+    tinysr.draw_array::<Lines,_>(&shader, &vertices);
 
     // Save the screen buffer to image
     let mut img = image::ImageBuffer::new(WIDTH as u32, HEIGHT as u32);

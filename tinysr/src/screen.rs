@@ -86,7 +86,7 @@ impl ScreenBuffer {
         self.get(p[0], p[1])
     }
 
-    fn conv_ndc_coords(&self, x: f32, y: f32) -> [i32;2] {
+    pub fn conv_ndc_coords(&self, x: f32, y: f32) -> [i32;2] {
         let x = (self.viewport.size[0] as f32 / 2.0) * (x + 1.0);
         let y = (self.viewport.size[1] as f32 / 2.0) * (y + 1.0);
         [x as i32, y as i32]
