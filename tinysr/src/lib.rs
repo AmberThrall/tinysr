@@ -2,10 +2,12 @@ mod buffer;
 mod rect;
 mod program;
 mod screen;
+mod primitive;
 
 pub use buffer::{Buffer, Buffer2d};
 pub use screen::ScreenBuffer;
 pub use program::Program;
+pub use primitive::*;
 use rect::Rect;
 
 #[derive(Default)]
@@ -30,10 +32,9 @@ impl TinySR {
         &self.screen
     }
 
-    pub fn draw_array<V,Vo>(&mut self, program: &dyn Program<Vertex=V,VertexOut=Vo>, vao: &Vec<V>, first: usize, count: usize) {
+    pub fn draw_array<P: Primitive,V,Vo>(&mut self, program: &dyn Program<Vertex=V,VertexOut=Vo>, vao: &Vec<V>, first: usize, count: usize) {
         for i in first..count {
-            let a = program.vertex(vao.get(i % vao.len()).unwrap());
-            self.screen.draw_ndc(a.0[0], a.0[1], program.fragment(a.1));
+            P::draw(program, vao.get(i).unwrap(), &mut screen);
         }
     }
 
