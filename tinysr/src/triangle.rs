@@ -38,14 +38,20 @@ impl Primitive for Triangle {
                     let p = [x as f32, y as f32, 0.0];
                     let bc = barycentric(pts_conv[0], pts_conv[1], pts_conv[2], p);
                     if bc[0] >= 0.0 && bc[1] >= 0.0 && bc[2] >= 0.0 {
-                        let data_interp = P::VertexOut::interpolate(
-                            &[pts[0].1.clone(), pts[1].1.clone(), pts[2].1.clone()], 
-                            &bc
-                        );
+                        let mut z = 0.0;
+                        for i in 0..3 { z += pts[i].0[2] * bc[i]; }
 
-                        let mut color = [0.0;4];
-                        if !program.fragment(data_interp, &mut color) {
-                            target.draw(x, y, color);
+                        // check zbuffer
+                        if target.write_zbuffer(x, y, z) {
+                            let data_interp = P::VertexOut::interpolate(
+                                &[pts[0].1.clone(), pts[1].1.clone(), pts[2].1.clone()], 
+                                &bc
+                            );
+    
+                            let mut color = [0.0;4];
+                            if !program.fragment(data_interp, &mut color) {
+                                target.draw(x, y, color);
+                            }
                         }
                     }
                 }

@@ -34,7 +34,7 @@ impl Program for Shader {
 
         let texcoords = Vec2::new(
             (uv.x * (self.texture.width() as f32)) as u32,
-            (uv.y * (self.texture.height() as f32)) as u32,
+            self.texture.height() - (uv.y * (self.texture.height() as f32)) as u32,
         );
         let pixel = self.texture.get_pixel(texcoords.x, texcoords.y);
         let texture_color = Rgba::new(
@@ -73,6 +73,7 @@ fn main() {
     let shader = Shader {
         mvp: Mat4::perspective_fov_rh_zo(1.3, WIDTH as f32, HEIGHT as f32, 0.01, 100.0) *
             Mat4::translation_3d(Vec3::new(0.0, 0.0, -2.5)) *
+            Mat4::rotation_y(3.14) *
             Mat4::scaling_3d(0.6),
         light_dir: Vec3::new(1.0,1.0,1.0).normalized(),
         texture,
@@ -86,15 +87,12 @@ fn main() {
 
         // build the vao
         let mut vertices = vec![Vertex::default(); mesh.positions.len()/3];
-        for idx in 0..mesh.positions.len()/3 {
-            vertices[idx].position = Vec3::new(mesh.positions[idx*3], mesh.positions[idx*3+1], mesh.positions[idx*3+2]);
-        }
-
         for idx in 0..mesh.indices.len()/3 {
             for j in 0..3 {
                 let pidx = mesh.indices[idx * 3 + j] as usize;
                 let tidx = mesh.texcoord_indices[idx * 3 + j] as usize;
                 let nidx = mesh.normal_indices[idx * 3 + j] as usize;
+                vertices[pidx].position = Vec3::new(mesh.positions[pidx*3], mesh.positions[pidx*3+1], mesh.positions[pidx*3+2]);
                 vertices[pidx].uv = Vec2::new(mesh.texcoords[tidx*2], mesh.texcoords[tidx*2+1]);
                 vertices[pidx].normal = Vec3::new(mesh.normals[nidx*3], mesh.normals[nidx*3+1], mesh.normals[nidx*3+2]);
             }
