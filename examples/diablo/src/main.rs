@@ -63,7 +63,7 @@ impl Program for Shader {
         let specular = view_dir.dot(reflect_dir).max(0.0).powf(texture(&self.texture_spec, uv)[0]);
         let diffuse = n.dot(light_dir).max(0.0);
         let c = texture(&self.texture, uv);
-        let light = ambient + diffuse + 0.2 * specular;
+        let light = ambient + diffuse + 0.3 * specular;
 
         *color = Rgba::from(c * light).clamped(Rgba::zero(), Rgba::one()).into_array();
         Fragment::Keep
