@@ -53,7 +53,7 @@ fn main() {
 
     let shader = Shader {
         mvp: Mat4::perspective_fov_rh_zo(1.3, WIDTH as f32, HEIGHT as f32, 0.01, 100.0) *
-            Mat4::translation_3d(Vec3::new(0.0, -0.5, -1.5)) *
+            Mat4::translation_3d(Vec3::new(0.0, 0.0, -1.5)) *
             Mat4::scaling_3d(0.8),
         light_dir: Vec3::new(1.0,1.0,1.0).normalized(),
         color: Rgba::new(1.0, 0.7, 0.1, 1.0),

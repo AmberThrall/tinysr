@@ -1,7 +1,7 @@
 use tinysr::*;
 
-const WIDTH: usize = 800;
-const HEIGHT: usize = 600;
+const WIDTH: usize = 100;
+const HEIGHT: usize = 100;
 
 struct Shader;
 
