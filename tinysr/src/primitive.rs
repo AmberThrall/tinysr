@@ -11,10 +11,11 @@ impl Primitive for Points {
         for vertex in vertices {
             let mut trans_v = [0.0;4];
             let vert_out = program.vertex(vertex, &mut trans_v);
-            let mut color = [0.0;4];
-            let discard = program.fragment(vert_out, &mut color);
-            if discard == Fragment::Keep && target.write_zbuffer_ndc(trans_v[0]/trans_v[3], trans_v[1]/trans_v[3], trans_v[2]/trans_v[3]) {
-                target.draw_ndc(trans_v[0], trans_v[1], color);
+            if target.write_zbuffer_ndc(trans_v[0]/trans_v[3], trans_v[1]/trans_v[3], trans_v[2]/trans_v[3]) {
+                let mut color = [0.0;4];
+                if program.fragment(vert_out, &mut color) == Fragment::Keep {
+                    target.draw_ndc(trans_v[0]/trans_v[3], trans_v[1]/trans_v[3], color);
+                }
             }
         }
     }
@@ -47,7 +48,7 @@ impl Primitive for Lines {
                 let dist_x = (a[0]-x).abs();
                 let dist_y = (a[1]-y).abs();
                 let t = ((dist_x*dist_x+dist_y*dist_y) as f32)/total_dist_sq;
-                let z = a_orig[2] * (1.0 - t) + b_orig[2] * t;
+                let z = a_orig[2] * (1.0-t) + b_orig[2] * t;
 
                 if target.write_zbuffer(x, y, z) {
                     let mut color = [0.0;4];

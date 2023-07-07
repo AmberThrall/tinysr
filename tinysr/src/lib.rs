@@ -12,6 +12,7 @@ pub use screen::ScreenBuffer;
 pub use program::Program;
 pub use primitive::{Primitive, Points, Lines};
 pub use triangles::Triangles;
+pub use interpolate::Interpolate;
 use rect::Rect;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

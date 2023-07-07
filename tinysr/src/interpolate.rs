@@ -2,6 +2,11 @@ pub trait Interpolate {
     fn interpolate<const N: usize>(v: &[Self;N], weights: &[f32;N]) -> Self where Self: Sized;
 }
 
+impl Interpolate for () {
+    fn interpolate<const N: usize>(_: &[Self;N], _: &[f32;N]) -> Self {
+    }
+}
+
 impl Interpolate for f32 {
     fn interpolate<const N: usize>(v: &[Self;N], weights: &[f32;N]) -> Self {
         let mut res = 0.0;

@@ -93,6 +93,16 @@ impl ScreenBuffer {
         }
     }
 
+    /// Reads from the zbuffer. Returns None if point is not on the screen.
+    /// 
+    /// # Arguments
+    /// 
+    /// * `x` - x coordinate
+    /// * `y` - y coordinate
+    pub fn read_zbuffer(&self, x: i32, y: i32) -> Option<&f32> {
+        self.zbuffer.get(x as usize, y as usize)
+    }
+
     /// Writes to the zbuffer given NDC coordinates if the new value is greater than the current value. 
     /// Returns true if the zbuffer was updated.
     /// 
@@ -149,5 +159,20 @@ impl ScreenBuffer {
         let x = (self.viewport.size[0] as f32 / 2.0) * (x + 1.0) + self.viewport.origin[0] as f32;
         let y = (self.viewport.size[1] as f32 / 2.0) * (y + 1.0) + self.viewport.origin[1] as f32;
         [x as i32, y as i32]
+    }
+
+    /// Converts screen coordinates into NDC coordinates
+    /// 
+    /// # Arguments
+    /// 
+    /// * `x` - x coordinate
+    /// * `y` - y coordinate
+    pub fn to_ndc_coords(&self, x: i32, y: i32) -> [f32;3] {
+        let x = x as f32 + 0.5;
+        let x = (2.0 * (x - self.viewport.origin[0] as f32)) / (self.viewport.size[0] as f32) - 1.0;
+        let y = y as f32 + 0.5;
+        let y = (2.0 * (y - self.viewport.origin[1] as f32)) / (self.viewport.size[1] as f32) - 1.0;
+
+        [x, y, 0.0]
     }
 }
